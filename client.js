@@ -45,6 +45,10 @@ switch (option) {
   case 4:
     addPhoto(client)
     break
+
+  case 5:
+    saveAll(client)
+    break
 }
 
 function sendMetadata (client) {
@@ -88,4 +92,32 @@ function addPhoto (client) {
   })
 
   stream.on('end', () => call.end())
+}
+
+function saveAll (client) {
+  const newEmployees = [
+    {
+      badgeNumber: 9527,
+      firstName: 'Albert',
+      lastName: 'Chao',
+      vacationAccrualRate: 1.2,
+      vacationaccrued: 30.5
+    },
+    {
+      badgeNumber: 2048,
+      firstName: 'Elton',
+      lastName: 'John',
+      vacationAccrualRate: 3.88,
+      vacationaccrued: 12
+    }
+  ]
+
+  const call = client.saveAll()
+  call.on('data', resStream => {
+    console.log(resStream.employee)
+  })
+  newEmployees.forEach(newOne => {
+    call.write({ employee: newOne })
+  })
+  call.end()
 }
